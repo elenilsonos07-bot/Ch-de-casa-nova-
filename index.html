@@ -116,19 +116,28 @@ style="display:block;background:#25D366;color:white;padding:15px;border-radius:1
 Confirmar presença pelo WhatsApp
 </a>
     <script>
-const planilha = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSpsTCVXlH48ZeXDm4gCSikMEU1sDewA6GhrPd_WuW2VGK5xfnVfosQQafKhMlikfq6PfQIXAB2XO0e/pubhtml";
+const planilha = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSpsTCVXlH48ZeXDm4gCSikMEU1sDewA6GhrPd_WuW2VGK5xfnVfosQQafKhMlikfq6PfQIXAB2XO0e/pub?output=csv";
 
 fetch(planilha)
 .then(res => res.text())
 .then(dados => {
-    const itens = document.querySelectorAll(".item");
 
-    itens.forEach(item => {
-        if (dados.includes(item.dataset.presente)) {
-            item.innerHTML += " - RESERVADO";
-            item.style.opacity = "0.5";
-        }
+    const linhas = dados.split("\n");
+
+    document.querySelectorAll(".item").forEach(item => {
+
+        const nome = item.dataset.presente;
+
+        linhas.forEach(linha => {
+            if (linha.includes(nome)) {
+                item.innerHTML = nome + " - RESERVADO";
+                item.style.opacity = "0.5";
+                item.style.pointerEvents = "none";
+            }
+        });
+
     });
+
 });
     </script>
 </body>

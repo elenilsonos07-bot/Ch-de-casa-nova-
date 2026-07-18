@@ -115,31 +115,39 @@ Confirmar pelo WhatsApp
 style="display:block;background:#25D366;color:white;padding:15px;border-radius:10px;text-align:center;text-decoration:none;font-size:18px;">
 Confirmar presença pelo WhatsApp
 </a>
+    
     <script>
-const planilha = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSpsTCVXlH48ZeXDm4gCSikMEU1sDewA6GhrPd_WuW2VGK5xfnVfosQQafKhMlikfq6PfQIXAB2XO0e/pub?output=csv";
+const planilha = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSpsTCVXlH48ZeXDm4gCSikMEU1sDewA6GhrPd_WuW2VGK5xfnVfosQQafKhMlikfq6PfQIXAB2XO0e/pub?gid=1870094706&single=true&output=csv";
 
 fetch(planilha)
 .then(res => res.text())
-.then(dados => {
+.then(texto => {
 
-    const linhas = dados.split("\n");
+    let linhas = texto.split("\n");
+    let reservados = [];
+
+    linhas.slice(1).forEach(linha => {
+        let colunas = linha.split(",");
+        let presente = colunas[1];
+
+        if (presente) {
+            reservados.push(presente.replace(/"/g,"").trim());
+        }
+    });
 
     document.querySelectorAll(".item").forEach(item => {
 
-        const nome = item.dataset.presente;
+        let nome = item.dataset.presente;
 
-        linhas.forEach(linha => {
-            if (linha.includes(nome)) {
-                item.innerHTML = nome + " - RESERVADO";
-                item.style.opacity = "0.5";
-                item.style.pointerEvents = "none";
-            }
-        });
+        if (reservados.includes(nome)) {
+            item.innerHTML = nome + " 🔒 Reservado";
+            item.style.opacity = "0.5";
+            item.style.pointerEvents = "none";
+        }
 
     });
 
 });
     </script>
-    
 </body>
 </html>

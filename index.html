@@ -123,31 +123,30 @@ fetch(planilha)
 .then(res => res.text())
 .then(texto => {
 
-    let linhas = texto.split("\n");
-    let reservados = [];
-
-    linhas.slice(1).forEach(linha => {
-        let colunas = linha.split(",");
-        let presente = colunas[1];
-
-        if (presente) {
-            reservados.push(presente.replace(/"/g,"").trim());
-        }
-    });
+    let reservados = texto
+    .split("\n")
+    .map(linha => linha.split(",")[1])
+    .map(presente => presente?.replace(/"/g,"").trim());
 
     document.querySelectorAll(".item").forEach(item => {
 
-        let nome = item.dataset.presente;
+        let nome = item.dataset.presente.trim();
 
         if (reservados.includes(nome)) {
+
             item.innerHTML = nome + " 🔒 Reservado";
             item.style.opacity = "0.5";
             item.style.pointerEvents = "none";
+
         }
 
     });
 
+})
+.catch(erro => {
+    console.log("Erro ao ler planilha:", erro);
 });
     </script>
+
 </body>
 </html>

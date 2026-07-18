@@ -122,7 +122,7 @@ const planilha = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSpsTCVXlH48Ze
 fetch(planilha)
 .then(res => res.text())
 .then(texto => {
-
+alert(texto);
     let reservados = texto
     .split("\n")
     .map(linha => linha.split(",")[1])

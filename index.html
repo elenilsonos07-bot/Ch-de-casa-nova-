@@ -117,34 +117,30 @@ Confirmar presença pelo WhatsApp
 </a>
     
     <script>
-const planilha = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSpsTCVXlH48ZeXDm4gCSikMEU1sDewA6GhrPd_WuW2VGK5xfnVfosQQafKhMlikfq6PfQIXAB2XO0e/pub?gid=1870094706&single=true&output=csv";
+const planilha = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSpsTCVXlH48ZeXDm4gCSikMEU1sDewA6GhrPd_WuW2VGK5xfnVfosQQafKhMlikfq6PfQIXAB2XO0e/gviz/tq?tqx=out:json&gid=1870094706";
 
 fetch(planilha)
 .then(res => res.text())
 .then(texto => {
-alert(texto);
-    let reservados = texto
-    .split("\n")
-    .map(linha => linha.split(",")[1])
-    .map(presente => presente?.replace(/"/g,"").trim());
+
+    let dados = JSON.parse(texto.substring(47).slice(0, -2));
+
+    let reservados = dados.table.rows.map(linha => {
+        return linha.c[1]?.v;
+    });
 
     document.querySelectorAll(".item").forEach(item => {
 
-        let nome = item.dataset.presente.trim();
+        let nome = item.dataset.presente;
 
         if (reservados.includes(nome)) {
-
             item.innerHTML = nome + " 🔒 Reservado";
             item.style.opacity = "0.5";
             item.style.pointerEvents = "none";
-
         }
 
     });
 
-})
-.catch(erro => {
-    console.log("Erro ao ler planilha:", erro);
 });
     </script>
 
